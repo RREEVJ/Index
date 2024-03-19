@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User ID to Username Converter</title>
+</head>
+<body>
+    <div id="username"></div>
+
+    <script>
+        // Get the user ID from the query string
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('userid');
+
+        // Function to fetch username from Roblox API
+        async function fetchUsername(userId) {
+            try {
+                const response = await fetch(`https://api.roblox.com/users/${userId}`);
+                const data = await response.json();
+                return data.Username;
+            } catch (error) {
+                console.error('Error fetching username:', error);
+                return 'Unknown';
+            }
+        }
+
+        // Display the username on the page
+        async function displayUsername() {
+            const usernameDiv = document.getElementById('username');
+            if (userId) {
+                const username = await fetchUsername(userId);
+                usernameDiv.textContent = `User ID ${userId} is ${username} on Roblox.`;
+            } else {
+                usernameDiv.textContent = 'User ID not provided.';
+            }
+        }
+
+        displayUsername();
+    </script>
+</body>
+</html>
